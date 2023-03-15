@@ -1,12 +1,14 @@
-# Webstack - Portfolio Project
+
+# StayWell
+
+## Webstack - Portfolio Project
+## The Back-end specialization portfolio project is the last major project!
 #### Front-end
 #### Back-end
 #### Portfolio project
 
-## roject!
-The Back-end specialization portfolio project is the last major project!
 
-## Make your choice
+### Make your choice
 We decided to work more on the backend side.
 
 The idea is to allow individuals to put furnished residences online.
@@ -18,7 +20,7 @@ The operation is simple. You come on the platform you create an account, you hav
 Any person who comes on the platform, whether he has an account or not, can see all the publications.
 People who want to order, comment, link or dliker a publication are obliged to register beforehand with a number.
 
-## Learning objectives
+### Learning objectives
 
 * How to set up an account creation and authentication system
 * How to list all publications

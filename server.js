@@ -1,7 +1,13 @@
-const http = require('http');
+import startServer from './libs/boot';
+import injectionMiddlewares from './libs/middlewares';
+import injectionRoutes from './routes/index'
 
-const server = http.createServer((req, res) => {
-    res.end('Voilà la réponse du serveur !');
-});
+import express from 'express';
 
-server.listen(process.env.PORT || 5000);
+const port = process.env.PORT ||  5000;
+
+const server = express()
+
+injectionMiddlewares(server);
+injectionRoutes(server);
+startServer(server);

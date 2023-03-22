@@ -1,6 +1,6 @@
-import startServer from './libs/boot';
-import injectionMiddlewares from './libs/middlewares';
-import injectionRoutes from './routes/index'
+import startServer from './backend/libs/boot';
+import injectionMiddlewares from './backend/libs/middlewares';
+import injectionRoutes from './backend/routes/index'
 
 import express from 'express';
 

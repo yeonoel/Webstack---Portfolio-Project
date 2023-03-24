@@ -6,7 +6,7 @@ class DBclient {
         const port = process.env.DB_Port || 5000;
         const database = process.env.DB_DATABASE || 'files_manager';
 
-        const dbUrl = 'mongodb://${host}:${port}/datanase';
+        const dbUrl = `mongodb://${host}:${port}/${database}`;
         this.client = new mongodb.MongoClient(dbUrl);
     }
 
@@ -14,12 +14,20 @@ class DBclient {
         return this.client.isConnected();
     }
   
-    async usersCollections(){
+    async usersCollections() {
         return this.client.db().collection('users');
     }
 
     async homesCollections() {
         return this.client.db().collection('Homes');
+    }
+
+    async nbUsers() {
+        return this.client.db().collection('users').countDocuments();
+    }
+
+    async nbHome() {
+        return this.client.db().collection('homes').countDocuments;
     }
 
 }

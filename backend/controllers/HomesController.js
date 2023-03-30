@@ -1,56 +1,86 @@
-import dbClient from "../utils/db";
+import dbClient from "../utils/db.js";
+import { ObjectId } from "mongodb";
 
-export default class FileController {
+export default class HomesController {
     static async postNewHome(req, res) {
         const { user } = req;
+        console.log(req.file);
+        console.log(req.body);
+
+        // const thingObject = JSON.parse(req.body)
+        const image = req.file ? req.file : null;
+
         const contry = req.body ? req.body.contry : null;
         const adress = req.body ? req.body.adress : null;
         const price = req.body ? req.body.price : null;
-        const cover = req.body ? req.body.cover : null;
 
-        
+
+
         if (!contry) {
             res.status(400).json({ error: 'Missing contry'});
+            return;
         }
         if (!adress) {
             res.status(400).json({ error: 'Missing adress'});
+            return;
         }
         if (!price) {
             res.status(400).json({ error: 'Missing price'});
+            return;
         }
-        if (!cover) {
+        if (!image) {
             res.status(400).json({ error: 'Missing cover'});
+            return;
         }
 
         const userId = user._id.toString();
 
         const newHome = {
-            userId: new mongoDBCore.BSON.ObjectId(userId),
+            userId: ObjectId(userId),
             contry,
             adress,
             price,
-            cover,
-        }
+            file: `${req.protocol}://${req.get('host')}/images/${req.file.filename} `,
+         }
+
+        console.log(newHome);
 
         const insertionInfo = await (await dbClient.homesCollections())
-            .insertOne({ newHome });
+            .insertOne(newHome);
         
         const fieldId = insertionInfo.insertedId.toString();
 
+        
+        console.log(fieldId)
         res.status(201).json({
             id: fieldId,
-            userId,
+            userId: ObjectId(userId),
             contry,
             adress,
             price,
-            cover,
+            file: `${req.protocol}://${req.get('host')}/images/${req.file.filename} `,
         })
     }
 
     static async getAllHomes(req, res) {
-        const allHome = (await dbClient.homesCollections()).find();
-        res.status(200).json(allHome);
+        const datas = await (await dbClient.homesCollections()).find().toArray();
+        console.log(datas)
+        res.status(200).json(datas);
     }
+
+    static async getOneHome(req, res) {
+        const id = req.params.id;
+        console.log(id)
+        console.log(id.toString())
+        const homeId = ObjectId(id);
+        console.log(homeId)
+        const datas = await (await dbClient.homesCollections()).find({ _id: homeId }).toArray();
+        console.log(datas)
+        res.status(200).json(datas[0]);
+
+    }
+
+
 
     static async putHome(req, res) {
         const id = req.params ? req.params.id : null;

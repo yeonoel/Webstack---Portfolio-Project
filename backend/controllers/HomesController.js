@@ -64,20 +64,30 @@ export default class HomesController {
 
     static async getAllHomes(req, res) {
         const datas = await (await dbClient.homesCollections()).find().toArray();
-        console.log(datas)
+        console.log(datas);
         res.status(200).json(datas);
     }
 
     static async getOneHome(req, res) {
         const id = req.params.id;
-        console.log(id)
-        console.log(id.toString())
+        
         const homeId = ObjectId(id);
         console.log(homeId)
         const datas = await (await dbClient.homesCollections()).find({ _id: homeId }).toArray();
         console.log(datas)
         res.status(200).json(datas[0]);
 
+    }
+
+    static async getMyResidences(req, res) {
+        console.log(req.params)
+        const usId = req.params.usId;
+        console.log(usId)
+        const homeId = ObjectId(usId);
+        console.log(homeId)
+        const datas = await (await dbClient.homesCollections()).find({ userId: homeId }).toArray();
+        console.log(datas);
+        res.status(200).json(datas);
     }
 
 
@@ -112,8 +122,12 @@ export default class HomesController {
     static async delHome(req, res) {
         const id = req.params ? req.params.id : null;
 
+        console.log('-----------------------' + id)
+        const usId = req.user._id
         const homeFilter = await (await dbClient.homesCollections())
-            .findOne({ _id: new mongoDBCore.BSON.ObjectId(id), });
+            .findOne({ _id: ObjectId(id), userId: usId });
+
+        console.log('-----------------------' + homeFilter)
         
         if (!homeFilter) {
             res.status(404).json({ error : 'Not found'});
